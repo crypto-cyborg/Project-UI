@@ -1,0 +1,102 @@
+.buy-sell-orders {
+    width: 100%;
+    height: 85vh;
+    display: flex;
+
+    .order-card {
+        width: 100%;
+        max-width: 45vw;
+        height: 80vh;
+        padding: 1rem;
+        background: #18191D;
+        color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+
+        .order-section {
+            width: 100%;
+            height: 100%;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+
+            h3 {
+                text-align: center;
+                font-size: 1.25rem;
+                color: #26a69a;
+                margin-bottom: 1rem;
+
+                &.sell-title {
+                    color: #e57373;
+                }
+            }
+
+            .order-header {
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 1px solid #2c2f36;
+                padding-bottom: 0.5rem;
+                margin-bottom: 1rem;
+
+                span {
+                    font-size: 1.125rem;
+                    color: #b0bec5;
+                    text-align: center;
+                    flex: 1;
+                }
+            }
+
+            .sell-section {
+                li:hover {
+                    background: rgba(229, 115, 115, 0.1);
+                }
+            }
+
+            ul {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                overflow-y: auto;
+                height: 60vh;
+
+                li {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 0.5rem;
+                    border-radius: 6px;
+
+                    &:hover {
+                        background: rgba(38, 166, 154, 0.1);
+                    }
+
+                    span {
+                        flex: 1;
+                        text-align: center;
+
+                        &:nth-child(2) {
+                            color: #26a69a;
+
+                            &.sell-amount {
+                                color: #e57373;
+                            }
+                        }
+
+                        &:nth-child(3) {
+                            font-weight: bold;
+                            color: #26a69a;
+
+                            &.sell-total {
+                                color: #e57373;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

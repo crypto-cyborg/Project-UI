@@ -1,0 +1,24 @@
+.step-card {
+    background-color: #edf2f7;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .icon {
+        color: #48bb78;
+        font-size: 2.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .title {
+        color: #2d3748;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+}

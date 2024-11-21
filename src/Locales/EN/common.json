@@ -1,0 +1,105 @@
+{
+  "Home": {
+    "Main": {
+      "Title1": "For Smart Investments",
+      "Title2": "an Innovative Platform",
+      "Description1": "Sign up and receive $10,000 in your demo account to learn trading.",
+      "Description2": "*The minimum deposit amount to start real trading is $10.",
+      "AccountCreateButton": "Create a Free Account"
+    },
+    "SecondPage": {
+      "Title": "Platform Features",
+      "Description": "We regularly enhance our platform for the convenience of your trading.",
+      "FeatureCards": {
+        "Card1": {
+          "Title": "User-Friendly Interface",
+          "Description": "You gain access to all trading tools in a simplified layout.",
+          "Button": "Sign Up"
+        },
+        "Card2": {
+          "Title": "Integrated Signals",
+          "Description": "Signals with 87% accuracy to guide your trading decisions.",
+          "Button": "Try It Out"
+        },
+        "Card3": {
+          "Title": "Advanced Trading Tools",
+          "Description": "Automated trading strategies and chart analysis features.",
+          "Button": "Discover"
+        },
+        "Card4": {
+          "Title": "24/7 Support",
+          "Description": "Our highly trained support team is ready to assist you anytime.",
+          "Button": "Submit Inquiry"
+        },
+        "Card5": {
+          "Title": "Fast Withdrawals",
+          "Description": "Quick withdrawal options with a minimum deposit of just $10.",
+          "Button": "Start Trading"
+        }
+      }
+    },
+    "Between": {
+      "Title": "Trade on Demo - No Registration Required!",
+      "Description": "Sign up for your personal account for access to additional features.",
+      "TryButton": "Try the Demo",
+      "RegisterButton": "Create Account"
+    },
+    "ThirdPage": {
+      "Title": "Increase Your Capital with Accurate Trading Forecasts",
+      "Description": "Will the price go up or down? Predict the price movement of the trading asset and execute the trade.",
+      "StepCards": {
+        "Card1": "Select an Asset",
+        "Card2": "Monitor the Chart",
+        "Card3": "Execute the Trade",
+        "Card4": "Get the Result"
+      },
+      "TryButton": "Try for Free",
+      "MiniDescription": "Practice in a registration-free demo account."
+    },
+    "FourthPage": {
+      "Title": "Frequently Asked Questions",
+      "Description": "Here you can find answers to the most common questions asked by new traders.",
+      "Questions": {
+        "Question1": {
+          "Question": "How can I learn to trade?",
+          "Answer": "Sign up and start practicing on a free demo account. It resembles real trading, using only virtual funds."
+        },
+        "Question2": {
+          "Question": "How long does it take to withdraw funds?",
+          "Answer": "Typically, the withdrawal process can take from 1 to 5 days from the moment the request is made. Actual time depends on the volume of withdrawal requests being processed at the same time. We do our best to withdraw your funds as quickly as possible."
+        },
+        "Question3": {
+          "Question": "What is a trading platform and what is its purpose?",
+          "Answer": "A trading platform is a software solution designed to conduct trading operations with various financial instruments. You will also have access to essential information such as asset prices, market positions, profit percentages, etc."
+        },
+        "Question4": {
+          "Question": "What is the minimum amount required to fund the account?",
+          "Answer": "The main advantage is that you don't need to deposit large amounts to trade on the platform. You can start with just a $10 deposit."
+        },
+        "Question5": {
+          "Question": "Are there any commissions for depositing/withdrawing financial funds?",
+          "Answer": "No, the broker does not charge any commissions for depositing/withdrawing financial funds. However, do not forget that such commissions may be charged by the external payment providers you use. They may also apply their own currency conversion rates."
+        }
+      }
+    }
+  },
+  "Auth": {
+    "Welcome": "Welcome!",
+    "Title": "To Our Trading Platform",
+    "Description": "Stay ahead in the world of trading and technology.",
+    "SignIn": "Sign In",
+    "SignUp": "Sign Up",
+    "Username": "Username",
+    "Password": "Password",
+    "FirstName": "Name",
+    "LastName": "Surname",
+    "Email": "Email",
+    "ConfirmPassword": "Confirm Password",
+    "SecretKey": "Secret key Binance",
+    "APIKey": "API key Binance",
+    "RememberMe": "Remember Me",
+    "ForgotPassword": "Forgot Password?",
+    "NoAccountText": "Don't have an account?",
+    "HasAccountText": "Already have an account?"
+  }
+}

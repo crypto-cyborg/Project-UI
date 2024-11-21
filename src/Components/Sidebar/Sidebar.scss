@@ -1,0 +1,208 @@
+.sidebar-container {
+    position: relative;
+    height: 100%;
+    z-index: 9999;
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background-color: black;
+        box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1), 8px 0 20px rgba(0, 0, 0, 0.2), 12px 0 30px rgba(0, 0, 0, 0.3);
+        padding: 0.625rem;
+        transition: all 0.5s;
+
+        &.expanded {
+            width: 15rem;
+        }
+
+        &.collapsed {
+            width: 4rem;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            height: 3rem;
+
+            .sidebar-title {
+                display: flex;
+                align-items: center;
+                transition: opacity 0.4s;
+                color: #e2e8f0;
+
+                &.show {
+                    opacity: 1;
+                }
+
+                &.hide {
+                    opacity: 0;
+                }
+
+                .icon {
+                    font-size: 1.25rem;
+                    margin-right: 0.5rem;
+                }
+
+                span {
+                    font-size: 1rem;
+                    font-weight: 400;
+                }
+            }
+
+            .toggle-btn {
+                position: absolute;
+                top: 0.200rem;
+                left: 50%;
+                background-color: transparent;
+                border: none;
+                color: #e2e8f0;
+                font-size: 1.25rem;
+                transform: translateX(-50%);
+                transition: all 0.5s;
+
+                &.expanded {
+                    left: 90%;
+                }
+            }
+        }
+
+        .sidebar-menu {
+            margin-top: 1.25rem;
+            list-style: none;
+
+            .menu-item {
+                position: relative;
+                margin-top: 1rem;
+
+                .menu-link {
+                    display: flex;
+                    align-items: center;
+                    color: #e2e8f0;
+                    padding: 0.5rem;
+                    border-radius: 0.5rem;
+                    transition: all 0.4s;
+                    text-decoration: none;
+
+                    &:hover {
+                        background-color: #e2e8f0;
+                        color: #11101D;
+                    }
+
+                    .menu-icon {
+                        margin: 0.5rem;
+                        min-width: 3.125rem;
+                    }
+
+                    &.active {
+                        background-color: #e2e8f0;
+                        color: #11101D;
+
+                        .menu-icon {
+                            color: #11101D;
+                        }
+                    }
+                  
+                    .menu-text {
+                        margin-left: 0.5rem;
+                        transition: opacity 0.4s;
+
+                        &.show {
+                            opacity: 1;
+                        }
+
+                        &.hide {
+                            opacity: 0;
+                        }
+                    }
+                }
+
+                .tooltip {
+                    position: absolute;
+                    left: 100%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    margin-left: 1.25rem;
+                    background-color: #11101D;
+                    color: #e2e8f0;
+                    padding: 0.25rem 0.5rem;
+                    border-radius: 0.5rem;
+                    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+                    white-space: nowrap;
+                    opacity: 0;
+                    transition: opacity 0.5s;
+                }
+
+                &:hover .tooltip {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 0.625rem;
+            display: flex;
+            align-items: center;
+
+            .profile-img {
+                width: 2.5rem;
+                height: 2.5rem;
+                border-radius: 0.5rem;
+                object-fit: cover;
+            }
+
+            .profile-info {
+                margin-left: 0.5rem;
+                transition: opacity 0.4s;
+
+                &.show {
+                    opacity: 1;
+                }
+
+                &.hide {
+                    opacity: 0;
+                }
+
+                .profile-name {
+                    color: #e2e8f0;
+                    font-size: 0.875rem;
+                }
+
+                .profile-role {
+                    color: #94a3b8;
+                    font-size: 0.75rem;
+                }
+            }
+
+            .logout-btn {
+                margin-left: auto;
+                color: #e2e8f0;
+                font-size: 1.25rem;
+                background-color: transparent;
+                border: none;
+            }
+        }
+    }
+
+    .main-content {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: all 0.5s;
+
+        &.expanded {
+            left: 15rem;
+            width: calc(100% - 15rem);
+        }
+
+        &.collapsed {
+            left: 4rem;
+            width: calc(100% - 4rem);
+        }
+    }
+}

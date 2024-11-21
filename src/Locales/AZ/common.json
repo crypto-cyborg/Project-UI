@@ -1,0 +1,105 @@
+{
+  "Home": {
+    "Main": {
+      "Title1": "Ağıllı investisiyalar üçün",
+      "Title2": "innovativ platforma",
+      "Description1": "Qeydiyyatdan keçin və ticarət öyrənmək üçün demo hesabınıza 10,000 USD alın.",
+      "Description2": "*Həqiqi ticarətə başlamaq üçün minimum depozit məbləği 10 USD-dir.",
+      "AccountCreateButton": "Pulsuz hesab yaradın"
+    },
+    "SecondPage": {
+      "Title": "Platformanın Xüsusiyyətləri",
+      "Description": "Biz platformamızı ticarətinizin rahat olması üçün mütəmadi olaraq təkmilləşdiririk.",
+      "FeatureCards": {
+        "Card1": {
+          "Title": "İstifadəçi dostu interfeys",
+          "Description": "Siz sadələşdirilmiş düzən içində bütün ticarət alətlərinə giriş əldə edirsiniz.",
+          "Button": "Qeydiyyatdan keçin"
+        },
+        "Card2": {
+          "Title": "İnteqrasiya olunmuş siqnallar",
+          "Description": "Ticarət qərarlarınızı yönləndirmək üçün 87% dəqiqliklə siqnallar.",
+          "Button": "Sınaqdan keçirin"
+        },
+        "Card3": {
+          "Title": "İrəliləmiş ticarət alətləri",
+          "Description": "Avtomatlaşdırılmış ticarət strategiyaları və qrafik analiz xüsusiyyətləri.",
+          "Button": "Kəşf edin"
+        },
+        "Card4": {
+          "Title": "Dəstək 24/7",
+          "Description": "Yüksək təlim keçmiş dəstək heyətimiz istənilən vaxt sizə kömək etməyə hazırdır.",
+          "Button": "Sorğu göndərin"
+        },
+        "Card5": {
+          "Title": "Tez çıxarışlar",
+          "Description": "Sadəcə 10 ABŞ dolları minimum depozit ilə sürətli çıxarış seçimləri.",
+          "Button": "Ticarətə başlayın"
+        }
+      }
+    },
+    "Between": {
+      "Title": "Demo-da ticarət edin - Qeydiyyat tələb olunmur!",
+      "Description": "Və əlavə xüsusiyyətlərə giriş üçün şəxsi hesabınıza qeydiyyatdan keçin.",
+      "TryButton": "Demo-nu sınaqdan keçirin",
+      "RegisterButton": "Hesab yaradın"
+    },
+    "ThirdPage": {
+      "Title": "Doğru ticarət proqnozları ilə kapitalınızı artırın",
+      "Description": "Qiymət yuxarı qalxacaq, yoxsa aşağı düşəcək? Ticarət aktivinin qiymət hərəkətini proqnozlaşdırın və əməliyyat həyata keçirin.",
+      "StepCards": {
+        "Card1": "Aktiv seçin",
+        "Card2": "Qrafiki izləyin",
+        "Card3": "Əməliyyat həyata keçirin",
+        "Card4": "Nəticəni əldə edin"
+      },
+      "TryButton": "Pulsuz sınaqdan keçirin",
+      "MiniDescription": "Qeydiyyatsız demo hesabda məşq edin."
+    },
+    "FourthPage": {
+      "Title": "Tez-tez verilən suallar",
+      "Description": "Burada siz yeni treyderlərin ən çox verdiyi suallara cavablar tapa bilərsiniz.",
+      "Questions": {
+        "Question1": {
+          "Question": "Necə ticarət etməyi öyrənə bilərəm ?",
+          "Answer": "Qeydiyyatdan keçin və pulsuz demo hesabında məşqlərə başlayın. Bu, real ticarətə bənzəyir, yalnız virtual vəsaitlərdən istifadə olunur."
+        },
+        "Question2": {
+          "Question": "Pulun çıxarılması üçün nə qədər vaxt tələb olunur ?",
+          "Answer": "Adətən, pulun çıxarılması prosesi müraciət verildiyi andan etibarən 1-dən 5 günə qədər çəkə bilər. Həqiqi vaxt, eyni anda emal edilən pul çıxarma müraciətlərinin həcminə bağlıdır. Biz, vəsaitlərinizi mümkün qədər tez çıxarmaq üçün əlimizdən gələni edirik."
+        },
+        "Question3": {
+          "Question": "Ticarət platforması nədir və onun məqsədi nədir ?",
+          "Answer": "Ticarət platforması, müxtəlif maliyyə alətləri ilə ticarət əməliyyatlarını həyata keçirmək üçün nəzərdə tutulmuş proqram həllidir. Eyni zamanda, aktivlərin qiymətləri, bazardakı mövqelər, gəlir faizi və s. kimi əsas məlumatlara da daxil olacaqsınız."
+        },
+        "Question4": {
+          "Question": "Hesabı doldurmaq üçün minimum məbləğ nə qədərdir ?",
+          "Answer": "Əsas üstünlük odur ki, platformada ticarət etmək üçün böyük məbləğlər yatırmağınız lazım deyil. Siz sadəcə 10 ABŞ dolları depoziti ilə başlaya bilərsiniz."
+        },
+        "Question5": {
+          "Question": "Maliyyə vəsaitlərinin daxil edilməsi/çıxarılması üçün hər hansı bir komissiya varmı ?",
+          "Answer": "Xeyr, broker maliyyə vəsaitlərinin daxil edilməsi/çıxarılması üçün heç bir komissiya almır. Lakin, istifadə etdiyiniz xarici ödəniş provayderləri tərəfindən belə komissiyaların alınabileceyini unutmayın. Onlar həmçinin öz valyuta konversiya dərəcələrini tətbiq edə bilərlər."
+        }
+      }
+    }
+  },
+  "Auth": {
+    "Welcome": "Xoş gəlmisiniz!",
+    "Title": "Bizim Ticarət Platformamıza",
+    "Description": "Ticarət və texnologiya dünyasında bir addım öndə olun.",
+    "SignIn": "Daxil Olun",
+    "SignUp": "Qeydiyyatdan Keçin",
+    "Username": "İstifadəçi adı",
+    "Password": "Şifrə",
+    "FirstName": "Ad",
+    "LastName": "Soyad",
+    "Email": "E-poçt",
+    "ConfirmPassword": "Şifrəni Təsdiqləyin",
+    "SecretKey": "Secret key Binance",
+    "APIKey": "API key Binance",
+    "RememberMe": "Məni Yadda Saxla",
+    "ForgotPassword": "Şifrəni Unutmusunuz?",
+    "NoAccountText": "Hesabınız Yoxdur?",
+    "HasAccountText": "Artıq hesabınız var?"
+  }
+}

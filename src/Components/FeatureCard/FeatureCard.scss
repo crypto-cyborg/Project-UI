@@ -1,0 +1,38 @@
+.card {
+    background-color: #1a2334;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: left;
+    transition: transform 0.3s;
+    color: #d3d3d3;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    .icon {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    h3 {
+        font-size: 1.2em;
+        margin: 0;
+        color: #ffffff;
+    }
+
+    p {
+        font-size: 0.9em;
+        margin: 10px 0 20px;
+    }
+
+    a {
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: bold;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

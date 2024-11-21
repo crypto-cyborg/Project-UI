@@ -1,0 +1,224 @@
+.auth {
+    position: relative;
+    height: 100vh;
+
+    .background-img {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-size: cover;
+        background-position: center;
+        color: white;
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: 0;
+        }
+
+        .container {
+            width: 80vw;
+            height: 70vh;
+            display: flex;
+
+            .content {
+                width: 50%;
+                height: 100%;
+                padding: 2rem;
+                backdrop-filter: blur(16px);
+                background-color: transparent;
+                border-radius: 0.5rem 0 0 0.5rem;
+
+                .gradient-text {
+                    font-size: 2.25rem;
+                    font-weight: bold;
+                    background: linear-gradient(to right, #22c55e, #f59e0b);
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    color: transparent;
+                }
+
+                .header-text {
+                    margin-top: 1rem;
+                    font-size: 1.5rem;
+                    color: #d1d5db;
+
+                    .highlight-text {
+                        color: #22c55e;
+                    }
+                }
+
+                .description {
+                    margin-top: 1.5rem;
+                    font-size: 1.125rem;
+                    color: #e5e7eb;
+                }
+            }
+        }
+
+        .form-container {
+            width: 50%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 0 0.5rem 0.5rem 0;
+
+            .form {
+                padding: 2rem;
+
+                .custom-text {
+                    font-size: 1.875rem;
+                    line-height: 2.25rem;
+                    font-weight: bold;
+                    color: transparent;
+                    background-clip: text;
+                    background-image: linear-gradient(to right, #68d391, #faf089);
+                }
+
+                .inputs-container {
+                    margin-top: 3%;
+
+                    &.register-page {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 1rem;
+                    }
+
+                    .input-container {
+                        margin-bottom: 1rem;
+                        position: relative;
+
+                        .custom-position {
+                            position: absolute;
+                            right: 0.75rem;
+                            top: 0.75rem;
+                            font-size: 1.25rem;
+                            line-height: 1.75rem;
+                            color: #cbd5e0;
+                        }
+
+                        .input {
+                            width: 100%;
+                            padding: 1rem;
+                            background-color: rgba(17, 24, 39, 0.8);
+                            color: #ffffff;
+                            border-radius: 0.5rem;
+                            border: none;
+                            font-size: 1rem;
+                            transition: all 0.2s ease-in-out;
+                            padding-right: 2.25rem;
+
+                            &:focus {
+                                outline: none;
+                            }
+                        }
+
+                        .input-label {
+                            position: absolute;
+                            width: 75%;
+                            left: 1rem;
+                            top: 1rem;
+                            color: #cbd5e0;
+                            transition: all 0.2s ease-in-out;
+                            overflow: hidden;
+                            white-space: nowrap; 
+                            text-overflow: ellipsis; 
+                            max-width: calc(100% - 2rem); 
+                            font-size: 1rem;
+
+                            &.focused {
+                                transform: translateY(-1.5rem);
+                                font-size: 0.875rem;
+                                line-height: 1.25rem;
+                                color: #68d391;
+                                outline: none;
+                            }
+                        }
+                    }
+                }
+
+                .forgot-password {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1.5rem;
+                    cursor: pointer;
+
+                    a {
+                        font-size: 0.875rem;
+                        color: #d1d5db;
+                        transition: color 0.2s;
+
+                        &:hover {
+                            color: #ef4444;
+                        }
+                    }
+                }
+
+                .signİnUpBtn {
+                    width: 100%;
+                    padding: 1rem;
+                    border-radius: 0.5rem;
+                    border: none;
+                    color: white;
+                    cursor: pointer;
+                    font-weight: bold;
+                    background-color: #16a34a;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+                    &:hover {
+                        background-color: #b91c1c;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    }
+
+                    &:disabled {
+                        cursor: not-allowed;
+                        background-color: transparent;
+                        box-shadow: none;
+                        color: transparent;
+                    }
+
+                    .btnAnimation {
+                        position: absolute;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 18vw;
+                        height: 18vh;
+                    }
+                }
+
+                .auth-switch {
+                    margin-top: 2rem;
+                    text-align: center;
+
+                    p {
+                        color: #d1d5db;
+
+                        a {
+                            color: #34d399;
+                            font-weight: bold;
+                            margin-left: 0.25rem;
+                            cursor: pointer;
+                            transition: all 0.3s ease;
+
+                            &:hover {
+                                color: #ef4444;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

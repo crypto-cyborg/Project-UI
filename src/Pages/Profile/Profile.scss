@@ -1,0 +1,353 @@
+.profile {
+    background-color: #282A31;
+    min-height: 100vh;
+    display: flex;
+
+    .column1 {
+        width: 70%;
+
+        .profile-data {
+            height: 30vh;
+            border-radius: 20px;
+            background-color: #18191D;
+            margin: 2%;
+        }
+
+        .personal-statistics {
+            height: 63%;
+            border-radius: 20px;
+            background-color: #18191D;
+            margin: 2%;
+
+            .header {
+                color: #E9E9E9;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                border-radius: 20px 20px 0 0;
+                background-color: #131417;
+
+                h2 {
+                    padding-left: 1rem;
+                    font-size: 1.25rem;
+                }
+
+                i {
+                    font-size: 1.5rem;
+                    color: #888;
+                    cursor: pointer;
+                }
+            }
+
+            .personal-statistics-chart {
+                height: 60%;
+                margin-right: 3%;
+
+                .personal-statistics-data {
+                    .data-header {
+                        display: flex;
+                        align-items: center;
+
+                        h2 {
+                            padding-left: 1.50rem;
+                            font-size: 1.25rem;
+                            margin-bottom: 5px;
+                            color: #747477;
+                        }
+
+                        .filter {
+                            display: flex;
+                            margin-left: auto;
+                            width: 40%;
+                            background-color: #131417;
+                            border-radius: 8px;
+
+                            .filter-buttons {
+                                display: flex;
+                                width: 100%;
+                                justify-content: space-between;
+
+                                button {
+                                    flex: 1;
+                                    margin: 0 5px;
+                                    padding: 8px 12px;
+                                    color: #44474d;
+                                    border: none;
+                                    background-color: transparent;
+                                    border-radius: 4px;
+                                    cursor: pointer;
+                                    font-size: 0.875rem;
+                                    transition: background-color 0.3s;
+
+                                    &:hover {
+                                        background-color: #18191D;
+                                        color: #E9E9E9;
+                                    }
+
+                                    &:active {
+                                        background-color: #18191D;
+                                    }
+
+                                    &.active {
+                                        background-color: #18191D;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    h3 {
+                        padding-left: 1.50rem;
+                        font-size: 1.25rem;
+                        margin-bottom: 5px;
+                        color: #E9E9E9;
+                    }
+                }
+            }
+        }
+    }
+
+    .column2 {
+        width: 30%;
+
+        .wallet {
+            width: 90%;
+            height: 40vh;
+            border-radius: 20px;
+            background-color: black;
+            margin-top: 4%;
+
+            .header {
+                color: #E9E9E9;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-radius: 20px 20px 0 0;
+
+                h2 {
+                    padding-left: 1rem;
+                    font-size: 1.25rem;
+                }
+
+                i {
+                    font-size: 1.5rem;
+                    color: #888;
+                    cursor: pointer;
+                }
+            }
+
+            .wallet-container {
+                margin-left: auto;
+                margin-right: auto;
+                width: 90%;
+                height: 80%;
+                border-radius: 20px;
+                background-color: #18191D;
+
+                .wallet-id {
+                    color: #E9E9E9;
+                    background-color: #131417;
+                    width: 90%;
+                    height: 15%;
+                    margin-left: auto;
+                    margin-right: auto;
+                    border-radius: 5px;
+                    transform: translateY(10px);
+
+                    .wallet-data{
+                        height: 100%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        p {
+                            font-size: 1.25rem;
+                            white-space: nowrap;
+                            margin-left: 5%;
+                        }
+
+                        button {
+                            padding: 5px 10px;
+                            font-size: 1.25rem;
+                            cursor: pointer;
+                            background-color: transparent;
+                            border: none;
+                            color: #747477;
+                        }
+                    }
+                }
+
+                .wallet-balance{
+                    h2{
+                        font-size: 1rem;
+                        margin: 0;
+                        color: #44474d;
+                    }
+
+                    p {
+                        margin-top: 1%;
+                        font-size: 2rem;
+                    }
+                }
+
+                .wallet-buttons {
+                    margin-top: 8%;
+                    display: flex;
+                    align-items: center;
+                    gap: 10%;
+                    
+                    .button {
+                        align-items: center;
+                        button {
+                            width: 50px;
+                            height: 50px;
+                            font-size: 1.5rem;
+                            background-color: #242528;
+                            border-radius: 50%;
+                            border: none;
+                            color: #E9E9E9;
+                            cursor: pointer;
+                        }
+
+                        p{
+                            text-align: center;
+                            font-size: 0.8rem;
+                            color: #E9E9E9;
+                            margin-top: 10px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .transactions {
+            width: 90%;
+            height: 53%;
+            border-radius: 20px;
+            background-color: #18191D;
+            margin-top: 5%;
+            overflow: hidden;
+        
+            .header {
+                color: #E9E9E9;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+                border-radius: 20px 20px 0 0;
+                background-color: #131417;
+        
+                h2 {
+                    font-size: 1.25rem;
+                }
+        
+                i {
+                    font-size: 1.5rem;
+                    color: #888;
+                    cursor: pointer;
+                }
+            }
+        
+            .tabs {
+                display: flex;
+                justify-content: space-around;
+                background-color: #1B1C1F;
+                padding: 0.5rem 0;
+        
+                button {
+                    position: relative; 
+                    background: none;
+                    border: none;
+                    color: #E9E9E9;
+                    font-size: 1rem;
+                    padding: 0.5rem 1rem;
+                    cursor: pointer;
+                    transition: color 0.3s ease; 
+                
+                    &:hover {
+                        color: #FFFFFF;
+                    }
+                
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: 0; 
+                        left: 50%; 
+                        width: 0; 
+                        height: 2px;
+                        background-color: #E9E9E9;
+                        transition: all 0.3s ease; 
+                        transform: translateX(-50%); 
+                    }
+                
+                    &:hover::after,
+                    &:focus::after {
+                        width: 50%; 
+                    }
+                }
+            }
+        
+            .transaction-list {
+                padding: 1rem;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+        
+                .transaction {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0.5rem;
+                    background-color: #131417;
+                    border-radius: 10px;
+        
+                    .icon {
+                        flex-shrink: 0;
+                        i {
+                            font-size: 1.25rem;
+                            border-radius: 50%;
+                            color: #E9E9E9;
+                        }
+                    }
+        
+                    .details {
+                        flex: 1;
+                        margin-left: 1rem;
+        
+                        h4 {
+                            color: #E9E9E9;
+                            font-size: 1rem;
+                        }
+        
+                        p {
+                            color: #888;
+                            font-size: 0.875rem;
+                        }
+                    }
+        
+                    .amount {
+                        text-align: right;
+        
+                        p {
+                            color: #E9E9E9;
+                            font-size: 1rem;
+                        }
+        
+                        .status {
+                            font-size: 0.75rem;
+                            &.pending {
+                                color: orange;
+                            }
+        
+                            &.completed {
+                                color: rgb(25, 180, 25);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+}
