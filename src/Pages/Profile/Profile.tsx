@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useProfile } from '../../Store/Hooks/useProfileHooks';
 import { AppDispatch, RootState } from '../../Store/Reducers/store';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,40 +15,42 @@ import {
     Area,
 } from "recharts";
 
-const data = [
-    { date: "Aug 21", value: 3.5 },
-    { date: "Sep 21", value: 3.8 },
-    { date: "Oct 21", value: 1.5 },
-    { date: "Nov 21", value: 4.8 },
-    { date: "Dec 21", value: 4.6 },
-    { date: "Jan 22", value: 5.4 },
-    { date: "Feb 22", value: 4.2 },
-    { date: "Mar 22", value: 6.1 },
-    { date: "Apr 22", value: 4.0 },
-    { date: "May 22", value: 7.8 },
-    { date: "Jun 22", value: 3.5 },
-    { date: "Jul 22", value: 6.2 },
-];
-
 const Profile: React.FC = () => {
     const profileState = useSelector((state: RootState) => state.profile);
+    const chartState = useSelector((state: RootState) => state.chart);
+    const authState = useSelector((state: RootState) => state.auth);
+    const { Initialize, GetUserPositions } = useProfile();
     const dispatch = useDispatch<AppDispatch>();
-    const guid = 'ec0bf459-c826-4246-9ec7-3eb6b4cc6230';
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(guid).then(() => {
-            alert('GUID скопирован в буфер обмена!');
-        }).catch((error) => {
-            console.error('Ошибка копирования:', error);
-        });
+        const walletId = profileState.Wallet?.Id;
+        if (walletId) {
+            navigator.clipboard.writeText(walletId);
+        }
     };
+
+    useEffect(() => {
+        Initialize(authState.User.Id);
+        GetUserPositions(authState.User.Id);
+    }, [authState.User]);
 
     return (
         <div className='profile'>
             <div className='column1'>
-                <div className='profile-data'>
-
+                <div className="profile-data">
+                    <div className="profile-header">
+                        <img className="profile-image" src={photo} />
+                        <div className="profile-info">
+                            <h2>{authState.User.FirstName} {authState.User.LastName}</h2>
+                            <p>@{authState.User.Username}</p>
+                            <p>{authState.User.Email}</p>
+                            <p className={authState.User.IsEmailConfirmed ? 'email-confirmed' : 'email-not-confirmed'}>
+                                {authState.User.IsEmailConfirmed ? 'Email Confirmed' : 'Email Not Confirmed'}
+                            </p>
+                        </div>
+                    </div>
                 </div>
+
 
                 <div className='personal-statistics'>
                     <div className='header'>
@@ -69,12 +71,27 @@ const Profile: React.FC = () => {
                             </div>
                             <h3>$100</h3>
                         </div>
-                        <ResponsiveContainer width="100%" height='100%'>
-                            <AreaChart data={data}>
+                        <ResponsiveContainer width="100%" height="100%" style={{paddingLeft: '50px'}}>
+                            <AreaChart data={profileState.Wallet?.Transactions || []}>
                                 <CartesianGrid vertical={false} horizontal={true} stroke="#1D1E22" />
-                                <XAxis dataKey="date" tick={{ fill: "#555457" }} axisLine={false} dy={15} />
+                                <XAxis
+                                    dataKey="Time"
+                                    tick={{ fill: "#555457" }}
+                                    axisLine={false}
+                                    dy={15}
+                                    tickFormatter={(time) => new Date(time).toLocaleDateString()}
+                                />
                                 <YAxis tick={{ fill: "#555457" }} tickFormatter={(value) => `${value}$`} axisLine={false} dx={-15} />
-                                <Tooltip contentStyle={{ border: 'none', borderRadius: '10%', backgroundColor: "#1D1E22", color: "#1D1E22" }} formatter={(value) => [`${value}$`, ""]} separator={""} />
+                                <Tooltip
+                                    contentStyle={{
+                                        border: "none",
+                                        borderRadius: "10%",
+                                        backgroundColor: "#1D1E22",
+                                        color: "#1D1E22"
+                                    }}
+                                    formatter={(value) => [`${value}$`, ""]}
+                                    separator=""
+                                />
 
                                 <defs>
                                     <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
@@ -87,7 +104,7 @@ const Profile: React.FC = () => {
 
                                 <Area
                                     type="monotone"
-                                    dataKey="value"
+                                    dataKey="Amount" 
                                     stroke="#fff"
                                     fill="url(#colorValue)"
                                     strokeWidth={2}
@@ -104,20 +121,31 @@ const Profile: React.FC = () => {
                 <div className='wallet'>
                     <div className='header'>
 
-                    <h2>Wallet</h2>
-                    <i className="bx bx-dots-horizontal-rounded"></i>
+                        <h2>Wallet</h2>
+                        <i className="bx bx-dots-horizontal-rounded"></i>
                     </div>
 
                     <div className='wallet-container'>
                         <div className='wallet-id'>
                             <div className='wallet-data'>
-                                <p>{`${guid.substring(0, 8)}...${guid.substring(guid.length - 6)}`}</p>
+                                <p>{`${profileState.Wallet?.Id.substring(0, 8)}...${profileState.Wallet?.Id.substring(profileState.Wallet?.Id.length - 6)}`}</p>
                                 <button onClick={handleCopy}><i className='bx bx-copy'></i></button>
                             </div>
 
                             <div className='wallet-balance'>
                                 <h2>Wallet balance</h2>
-                                <p>$45.231</p>
+                                <p>
+                                    ${profileState.Wallet?.Accounts.reduce((acc, account) => {
+                                        const price = account.Currency.Ticker === 'USDT'
+                                            ? 1
+                                            : chartState.prices.find(p => p.symbol === `${account.Currency.Ticker}USDT`)?.price;
+
+                                        if (price && !isNaN(account.Balance)) {
+                                            return acc + (Number(account.Balance) * price);
+                                        }
+                                        return acc;
+                                    }, 0).toFixed(2)}$
+                                </p>
                             </div>
 
                             <div className='wallet-buttons'>
@@ -145,36 +173,29 @@ const Profile: React.FC = () => {
                     <div className="tabs">
                         <button>Receive</button>
                         <button>Send</button>
-                        <button>Sell</button>
-                        <button>Buy</button>
+                        <button>Assets</button>
                     </div>
                     <div className="transaction-list">
-                        <div className="transaction">
-                            <div className="icon">
-                                <i className='bx bxl-airbnb' ></i>
+                        {profileState.Wallet?.Accounts.map((account, index) => (
+                            <div key={index} className="transaction">
+                                <div className="icon">
+                                    <i className='bx bxl-airbnb' ></i>
+                                </div>
+                                <div className="details">
+                                    <h4>{account.Currency.Ticker}</h4>
+                                    <p>{account.Id}</p>
+                                </div>
+                                <div className="amount">
+                                    <p>
+                                        ${account.Currency.Ticker === 'USDT'
+                                            ? (Number(account.Balance) || 0).toFixed(2)
+                                            : isNaN(account.Balance * (chartState.prices[index]?.price || 0))
+                                                ? 0
+                                                : (account.Balance * (chartState.prices[index]?.price || 0)).toFixed(2)}$
+                                    </p>
+                                </div>
                             </div>
-                            <div className="details">
-                                <h4>ETH</h4>
-                                <p>2022-07-01 08:25:30</p>
-                            </div>
-                            <div className="amount">
-                                <p>1.49</p>
-                                <span className="status pending">Pending</span>
-                            </div>
-                        </div>
-                        <div className="transaction">
-                            <div className="icon">
-                                <i className='bx bxl-airbnb' ></i>
-                            </div>
-                            <div className="details">
-                                <h4>BNB</h4>
-                                <p>2022-07-06 17:55:01</p>
-                            </div>
-                            <div className="amount">
-                                <p>13.25</p>
-                                <span className="status completed">Completed</span>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </div>

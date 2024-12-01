@@ -10,14 +10,20 @@ import './Sidebar.scss'
 const sideBarItems = [
   { name: "Chart", path: "/chart", iconClassName: "bx bx-grid-alt" },
   { name: "Analytics", path: "/analytics", iconClassName: "bx bx-pie-chart-alt-2" },
-  { name: "Messages", path: "/chart", iconClassName: "bx bx-chat" },
   { name: "Profile", path: "/profile", iconClassName: "bx bx-user" },
+  { name: "Admin Dashboard", path: "/admin", iconClassName: "bx bx-lock-alt" }
 ];
 
 export default function Sidebar() {
   const sideBar = useSelector((state: RootState) => selectSideBar(state));
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
+
+  const authState = useSelector((state: RootState) => state.auth);
+
+  const filteredSideBarItems = authState.User?.Role !== 'AppAdmin' 
+    ? sideBarItems.filter(item => item.name !== "Admin Dashboard") 
+    : sideBarItems;
 
   return (
     <div className="sidebar-container">
@@ -35,7 +41,7 @@ export default function Sidebar() {
           </button>
         </div>
         <ul className="sidebar-menu">
-          {sideBarItems.map((item, index) => (
+          {filteredSideBarItems.map((item, index) => (
             <li
               key={index}
               className={`menu-item`}

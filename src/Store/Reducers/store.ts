@@ -3,6 +3,7 @@ import sideBarReducer from './sideBarSlice';
 import chartReducer from './chartSlice';
 import profileReducer from './profileSlice';
 import authReducer from './authSlice';
+import adminReducer from './adminSlice';
 
 const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
         sideBar: sideBarReducer,
         chart: chartReducer,
         profile: profileReducer,
+        admin: adminReducer
     },
 });
 

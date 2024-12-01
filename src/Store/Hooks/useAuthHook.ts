@@ -1,25 +1,30 @@
 import { useDispatch } from 'react-redux';
-import { LoginUser, RegisterUser } from '../../Store/Actions/authActions';
+import { LoginUser, RegisterUser, GetUserAccountInfo } from '../../Store/Actions/authActions';
 import { LoginDTO, RegisterDTO } from '../../Data/DTOs/Auth.dto';
 import { AppDispatch } from '../Reducers/store';
+import { useNavigate } from 'react-router-dom';
 
 export const useAuth = () => {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     const Login = async (loginData: LoginDTO) => {
-        try {
-            await dispatch(LoginUser(loginData));
-        } catch (error) {
-            console.error('Ошибка регистрации:', error);
-        }
-    };
-    const Register = async (registerData: RegisterDTO) => {
-        try {
-            await dispatch(RegisterUser(registerData));
-        } catch (error) {
-            console.error('Ошибка регистрации:', error);
-        }
+        dispatch(LoginUser(loginData))
+            .then((result) => {
+                if (result.meta.requestStatus === 'fulfilled') {
+                    GetUserAccountInfoAction();
+                    navigate('/chart');
+                }
+            });
     };
 
-    return { Login, Register };
+    const Register = async (registerData: RegisterDTO) => {
+        await dispatch(RegisterUser(registerData));
+    };
+
+    const GetUserAccountInfoAction = async () => {
+        await dispatch(GetUserAccountInfo());
+    };
+
+    return { Login, Register, GetUserAccountInfoAction };
 };

@@ -5,17 +5,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from '../../Store/Reducers/store';
 import * as authSlice from '../../Store/Reducers/authSlice';
 import { useAuth } from "../../Store/Hooks/useAuthHook";
-
 import animationData from "../../Assets/Videos/BtnLoading.json";
 import Lottie from "lottie-react";
-
 import "./Auth.scss";
+import { useState } from "react";
+import { ToastContainer } from 'react-toastify';
+import '../../App.scss'
+import 'react-toastify/dist/ReactToastify.css';
+import video from '../../Assets/Videos/GetApi.mov'
 
 const Auth: React.FC = () => {
     const authState = useSelector((state: RootState) => state.auth);
     const { t } = useTranslation("common");
     const dispatch = useDispatch();
+    const [isVideoOpen, setIsVideoOpen] = useState(false);
     const { Login, Register } = useAuth();
+
+    const openVideo = () => {
+        setIsVideoOpen(true);
+    };
+
+    const closeVideo = () => {
+        setIsVideoOpen(false);
+    };
 
     return (
         <div className="auth">
@@ -26,15 +38,27 @@ const Auth: React.FC = () => {
                 style={{ backgroundImage: `url(${foto})` }}
             >
                 <div className="overlay"></div>
-
+                {isVideoOpen && (
+                    <div className={`video-modal ${isVideoOpen ? 'active' : ''}`}>
+                        <div className="video-container">
+                            <video
+                                src={video}
+                                title="Video"
+                                controls
+                                autoPlay
+                            ></video>
+                            <button className="close-btn" onClick={closeVideo}><i className="bx bx-x"></i></button>
+                        </div>
+                    </div>
+                )}
                 <div className="container">
                     <div className="content">
                         <h2 className="gradient-text">Hash Techie</h2>
                         <h3 className="header-text">
                             {t("Auth.Welcome")} <br />
-                            <span className="highlight-text">{t("Auth.Title")}</span>
+                            {/* <span className="highlight-text">{t("Auth.Title")}</span> */}
                         </h3>
-                        <p className="description">{t("Auth.Description")}</p>
+                        {/* <p className="description">{t("Auth.Description")}</p> */}
                     </div>
                     <div className="form-container">
                         <div className="form">
@@ -53,14 +77,14 @@ const Auth: React.FC = () => {
                                         <input
                                             type="text"
                                             id="firstName"
-                                            value={authState.registerData.firstName}
-                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, firstName: e.target.value }))}
+                                            value={authState.registerData.FirstName}
+                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, FirstName: e.target.value }))}
                                             className="input"
                                             required
                                         />
                                         <label
                                             htmlFor="firstName"
-                                            className={`input-label ${authState.registerData.firstName ? "focused" : ""
+                                            className={`input-label ${authState.registerData.FirstName ? "focused" : ""
                                                 }`}
                                         >
                                             {t("Auth.FirstName")}
@@ -76,14 +100,14 @@ const Auth: React.FC = () => {
                                         <input
                                             type="text"
                                             id="lastName"
-                                            value={authState.registerData.lastName}
-                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, lastName: e.target.value }))}
+                                            value={authState.registerData.LastName}
+                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, LastName: e.target.value }))}
                                             className="input"
                                             required
                                         />
                                         <label
                                             htmlFor="lastName"
-                                            className={`input-label ${authState.registerData.lastName ? "focused" : ""
+                                            className={`input-label ${authState.registerData.LastName ? "focused" : ""
                                                 }`}
                                         >
                                             {t("Auth.LastName")}
@@ -98,14 +122,14 @@ const Auth: React.FC = () => {
                                     <input
                                         type="text"
                                         id="username"
-                                        value={authState.registerData.username}
-                                        onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, username: e.target.value }))}
+                                        value={authState.registerData.Username}
+                                        onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, Username: e.target.value }))}
                                         className="input"
                                         required
                                     />
                                     <label
                                         htmlFor="username"
-                                        className={`input-label ${authState.registerData.username ? "focused" : ""
+                                        className={`input-label ${authState.registerData.Username ? "focused" : ""
                                             }`}
                                     >
                                         {t("Auth.Username")}
@@ -120,14 +144,14 @@ const Auth: React.FC = () => {
                                         <input
                                             type="text"
                                             id="email"
-                                            value={authState.registerData.email}
-                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, email: e.target.value }))}
+                                            value={authState.registerData.Email}
+                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, Email: e.target.value }))}
                                             className="input"
                                             required
                                         />
                                         <label
                                             htmlFor="email"
-                                            className={`input-label ${authState.registerData.email ? "focused" : ""
+                                            className={`input-label ${authState.registerData.Email ? "focused" : ""
                                                 }`}
                                         >
                                             {t("Auth.Email")}
@@ -142,14 +166,14 @@ const Auth: React.FC = () => {
                                     <input
                                         type="password"
                                         id="password"
-                                        value={authState.registerData.password}
-                                        onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, password: e.target.value }))}
+                                        value={authState.registerData.Password}
+                                        onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, Password: e.target.value }))}
                                         className="input"
                                         required
                                     />
                                     <label
                                         htmlFor="password"
-                                        className={`input-label ${authState.registerData.password ? "focused" : ""
+                                        className={`input-label ${authState.registerData.Password ? "focused" : ""
                                             }`}
                                     >
                                         {t("Auth.Password")}
@@ -164,14 +188,14 @@ const Auth: React.FC = () => {
                                         <input
                                             type="password"
                                             id="confirmPassword"
-                                            value={authState.registerData.confirmPassword}
-                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, confirmPassword: e.target.value }))}
+                                            value={authState.registerData.ConfirmPassword}
+                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, ConfirmPassword: e.target.value }))}
                                             className="input"
                                             required
                                         />
                                         <label
                                             htmlFor="confirmPassword"
-                                            className={`input-label ${authState.registerData.confirmPassword ? "focused" : ""
+                                            className={`input-label ${authState.registerData.ConfirmPassword ? "focused" : ""
                                                 }`}
                                         >
                                             {t("Auth.ConfirmPassword")}
@@ -187,21 +211,21 @@ const Auth: React.FC = () => {
                                         <input
                                             type="text"
                                             id="secretKey"
-                                            value={authState.registerData.secretKey}
-                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, secretKey: e.target.value }))}
+                                            value={authState.registerData.SecretKey}
+                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, SecretKey: e.target.value }))}
                                             className="input"
                                             required
                                         />
                                         <label
                                             htmlFor="secretKey"
-                                            className={`input-label ${authState.registerData.secretKey ? "focused" : ""
+                                            className={`input-label ${authState.registerData.SecretKey ? "focused" : ""
                                                 }`}
                                         >
                                             {t("Auth.SecretKey")}
                                         </label>
                                     </div>
                                 }
-                                
+
                                 {authState.isRegister &&
                                     <div className="input-container">
                                         <span className="custom-position">
@@ -210,14 +234,14 @@ const Auth: React.FC = () => {
                                         <input
                                             type="text"
                                             id="apiKey"
-                                            value={authState.registerData.apiKey}
-                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, apiKey: e.target.value }))}
+                                            value={authState.registerData.ApiKey}
+                                            onChange={(e) => dispatch(authSlice.setRegisterData({ ...authState.registerData, ApiKey: e.target.value }))}
                                             className="input"
                                             required
                                         />
                                         <label
                                             htmlFor="apiKey"
-                                            className={`input-label ${authState.registerData.apiKey ? "focused" : ""
+                                            className={`input-label ${authState.registerData.ApiKey ? "focused" : ""
                                                 }`}
                                         >
                                             {t("Auth.APIKey")}
@@ -226,8 +250,18 @@ const Auth: React.FC = () => {
                                 }
                             </div>
 
-                            <div className="forgot-password">
-                                <a>{t("Auth.ForgotPassword")}</a>
+                            <div className="btn-texts">
+                                {!authState.isRegister &&
+                                    <div className="forgot-password">
+                                        <a>{t("Auth.ForgotPassword")}</a>
+                                    </div>
+                                }
+
+                                {authState.isRegister &&
+                                    <div className="video">
+                                        <a onClick={openVideo}>{t("Auth.Video")}</a>
+                                    </div>
+                                }
                             </div>
 
                             <button
@@ -235,10 +269,10 @@ const Auth: React.FC = () => {
                                 disabled={authState.isLoading}
                                 onClick={() =>
                                     authState.isRegister
-                                        ? Register(authState.registerData) 
+                                        ? Register(authState.registerData)
                                         : Login({
-                                            username: authState.registerData.username, 
-                                            password: authState.registerData.password,
+                                            Username: authState.registerData.Username,
+                                            Password: authState.registerData.Password,
                                         })
                                 }
                             >
@@ -269,6 +303,7 @@ const Auth: React.FC = () => {
                     </div>
                 </div>
             </div>
+            <ToastContainer/>
         </div>
     );
 };

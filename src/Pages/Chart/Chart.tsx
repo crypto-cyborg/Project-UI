@@ -1,13 +1,13 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../Store/Reducers/store';
 import useChartHook from '../../Store/Hooks/useChartHook';
 import * as chartSlice from '../../Store/Reducers/chartSlice';
-import { setIsDropdownOpen, setActiveTab, setCandleInterval, setIsBalanceDropdownOpen, setBalanceType } from '../../Store/Reducers/chartSlice';
-import "./Chart.scss"
-import "./Header.scss"
-import "./Main.scss"
-import "./Buy-Sell-Orders.scss"
+import './Chart.scss'
+import './Header.scss'
+import './Main.scss'
+import './Orders.scss'
+import { useProfile } from '../../Store/Hooks/useProfileHooks';
 
 const chartProps = {
   layout: {
@@ -29,8 +29,19 @@ const chartProps = {
 export default function Chart() {
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
   const chartState = useSelector((state: RootState) => state.chart);
-  const { Buy, SearchChange, PairClick } = useChartHook(chartContainerRef, chartProps);
+  const profileState = useSelector((state: RootState) => state.profile);
+  const { Buy, Sell, OpenPosition, SearchChange, PairClick } = useChartHook(chartContainerRef, chartProps);
+  const { Initialize, GetUserPositions } = useProfile();
   const dispatch = useDispatch<AppDispatch>();
+  const authState = useSelector((state: RootState) => state.auth);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    if (chartState.balanceType === 'Demo' && profileState.Wallet === null) {
+      Initialize(authState.User.Id);
+      GetUserPositions(authState.User.Id);
+    }
+  }, [chartState.balanceType]);
 
   return (
     <div className='chart'>
@@ -49,29 +60,18 @@ export default function Chart() {
               {chartState.filteredPairs.map((pair, index) => (
                 <li
                   key={index}
-                  onClick={() => PairClick(pair)}
+                  onClick={() => PairClick(pair.symbol)}
                   className="element"
                 >
-                  {pair}
+                  {pair.symbol}
                 </li>
               ))}
             </ul>
           )}
-          <button className="search-icon">
-            <svg
-              className="h-4 w-4 fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 56.966 56.966"
-              width="512px"
-              height="512px"
-            >
-              <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
-            </svg>
-          </button>
           <div className='panel'>
             <div className="relative-1">
               <div
-                onClick={() => dispatch(setIsDropdownOpen(!chartState.isDropdownOpen))}
+                onClick={() => dispatch(chartSlice.setIsDropdownOpen(!chartState.isDropdownOpen))}
                 className="dropdown-button"
               >
                 <span>{chartState.candleInterval}</span>
@@ -91,7 +91,7 @@ export default function Chart() {
                         <li
                           key={interval}
                           className="element"
-                          onClick={() => dispatch(setCandleInterval(interval))}
+                          onClick={() => dispatch(chartSlice.setCandleInterval(interval))}
                         >
                           {interval}
                         </li>
@@ -103,7 +103,7 @@ export default function Chart() {
             </div>
             <div className="relative-2">
               <div
-                onClick={() => dispatch(setIsBalanceDropdownOpen(!chartState.isBalanceDropdownOpen))}
+                onClick={() => dispatch(chartSlice.setIsBalanceDropdownOpen(!chartState.isBalanceDropdownOpen))}
                 className="dropdown-button"
               >
                 <span>{chartState.balanceType}</span>
@@ -123,8 +123,8 @@ export default function Chart() {
                         key={type}
                         className="element"
                         onClick={() => {
-                          dispatch(setBalanceType(type));
-                          dispatch(setIsBalanceDropdownOpen(false));
+                          dispatch(chartSlice.setBalanceType(type));
+                          dispatch(chartSlice.setIsBalanceDropdownOpen(false));
                         }}
                       >
                         {type}
@@ -190,7 +190,7 @@ export default function Chart() {
             overflow: 'hidden',
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
             backgroundColor: '#1a1f2b',
-            position: 'relative', 
+            position: 'relative',
           }}
         >
           <div
@@ -199,34 +199,45 @@ export default function Chart() {
               alignItems: 'center',
               justifyContent: 'space-around',
               backgroundColor: '#131417',
-              height: '7%', 
+              height: '7%',
               width: '100%',
-              position: 'absolute', 
+              position: 'absolute',
               top: 0,
               left: 0,
               zIndex: 20,
-              borderRadius: '10px 10px 0 0', 
-              borderBottom: '1px solid #374151', 
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',  
+              borderRadius: '10px 10px 0 0',
+              borderBottom: '1px solid #374151',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             }}
           >
-              <div style={{color: 'white'}}>Chart</div>
+            <div style={{ color: 'white' }}>Chart</div>
           </div>
         </div>
 
         <div className='buy-sell'>
           <div className="buy-sell-container">
             <div className="tabs">
-              {['Spot', 'Cross', 'Isolated', 'Grid'].map((tab) => (
+              {['Spot', 'Margin', 'Bot'].map((tab) => (
                 <button
                   key={tab}
                   className={`tab ${chartState.activeTab === tab ? 'active' : ''}`}
-                  onClick={() => dispatch(setActiveTab(tab))}
+                  onClick={() => dispatch(chartSlice.setActiveTab(tab))}
                 >
                   {tab}
                 </button>
               ))}
             </div>
+            {/* <div className="secondary-tabs">
+              {['Limit', 'Market',].map((tab) => (
+                <button
+                  key={tab}
+                  className={`tab ${chartState.activeSecondaryTab === tab ? 'active' : ''}`}
+                  onClick={() => dispatch(chartSlice.setActiveSecondaryTab(tab))}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div> */}
             <div className="inputs-container">
               <label className="container-name">
                 Price
@@ -234,9 +245,9 @@ export default function Chart() {
               <div className="input-container">
                 <div className="input-wrapper">
                   <input
-                    type="text"
+                    type="number"
                     readOnly
-                    value={chartState.currentPrice}
+                    value={chartState.activeSecondaryTab === 'Limit' ? chartState.tradingState.Price : chartState.currentPrice}
                     className="price-input"
                   />
                   <div className="currency">
@@ -245,8 +256,10 @@ export default function Chart() {
                 </div>
                 <div className="input-wrapper">
                   <input
-                    type="text"
+                    type="number"
                     className="input"
+                    value={chartState.tradingState.Quantity}
+                    onChange={e => dispatch(chartSlice.setTradingStateQuantity(parseFloat(e.target.value)))}
                   />
                   <label className="input-placeholder">
                     Amount
@@ -255,96 +268,123 @@ export default function Chart() {
               </div>
             </div>
             <div className="inputs-container">
-              <label className="container-name">
-                Take Profit
-              </label>
               <div className="input-container">
                 <div className="input-wrapper">
                   <input
-                    type="text"
+                    type="number"
                     className="input"
+                    value={chartState.tradingState.Total}
+                    onChange={(e) => dispatch(chartSlice.setTradingStateTotal(parseFloat(e.target.value)))}
                   />
                   <label className="input-placeholder">
-                    Limit
+                    Total
                   </label>
                 </div>
-                <div className="input-wrapper">
+              </div>
+            </div>
+            {chartState.activeTab == 'Margin' &&
+              <div className="inputs-container">
+                <label className="container-name">
+                  Take Profit / Stop Loss
+                </label>
+                <div className="input-container">
                   <div className="input-wrapper">
                     <input
-                      type="text"
+                      type="number"
                       className="input"
-                      style={{ paddingRight: '2rem' }}
+                      value={chartState.tradingState.TakeProfit}
+                      onChange={e => dispatch(chartSlice.setTradingStateTakeProfit(parseFloat(e.target.value)))}
                     />
                     <label className="input-placeholder">
-                      Offset
+                      Limit
                     </label>
                   </div>
-                  <div className="percent">
-                    <span style={{ color: "#cbd5e1" }}>%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="inputs-container">
-              <label className="container-name">
-                Stop Loss
-              </label>
-              <div className="input-container">
-                <div className="input-wrapper">
-                  <input
-                    type="text"
-                    className="input"
-                  />
-                  <label className="input-placeholder">
-                    Trigger
-                  </label>
-                </div>
-                <div className="input-wrapper">
                   <div className="input-wrapper">
                     <input
-                      type="text"
+                      type="number"
                       className="input"
-                      style={{ paddingRight: '2rem' }}
+                      value={chartState.tradingState.StopLoss}
+                      onChange={e => dispatch(chartSlice.setTradingStateStopLoss(parseFloat(e.target.value)))}
                     />
                     <label className="input-placeholder">
-                      Offset
+                      Limit
                     </label>
                   </div>
-                  <div className="percent">
-                    <span style={{ color: "#cbd5e1" }}>%</span>
+                </div>
+              </div>
+            }
+            {chartState.activeTab != 'Spot' &&
+              <div className="inputs-container">
+                <div className="input-container">
+                  <div className="input-wrapper">
+                    <input
+                      type="number"
+                      className="input"
+                      value={chartState.tradingState.Leverage}
+                      onChange={(e) => dispatch(chartSlice.setTradingStateLeverage(parseFloat(e.target.value)))}
+                    />
+                    <label className="input-placeholder">
+                      Leverage
+                    </label>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="inputs-container">
-              <div className="input-container">
-                <div className="input-wrapper">
-                  <input
-                    type="text"
-                    className="input"
-                  />
-                  <label className="input-placeholder">
-                    Limit
-                  </label>
-                </div>
-              </div>
-            </div>
+            }
             <div className="buttons-container">
               <button
-                onClick={() => Buy('BUY')}
+                onClick={() =>
+                  chartState.activeTab === "Margin"
+                    ? OpenPosition({
+                      UserId: authState.User.Id,
+                      Ticker: chartState.symbol.QuoteAsset,
+                      Amount: chartState.tradingState.Quantity,
+                      Symbol: chartState.symbol.Symbol,
+                      IsLong: true,
+                      StopLoss: chartState.tradingState.StopLoss,
+                      TakeProfit: chartState.tradingState.TakeProfit,
+                      Leverage: chartState.tradingState.Leverage,
+                    })
+                    : Buy({
+                      UserId: authState.User.Id,
+                      BaseAsset: chartState.symbol.BaseAsset,
+                      QuoteAsset: chartState.symbol.QuoteAsset,
+                      Symbol: chartState.symbol.Symbol,
+                      Price: 10,
+                      Quantity: chartState.tradingState.Quantity,
+                    })
+                }
                 className="buy-button">
-                Buy
+                {chartState.activeTab === "Bot" ? "Start" : "Buy"}
               </button>
               <button
-                onClick={() => Buy('SELL')}
+                onClick={() =>
+                  chartState.activeTab === "Margin"
+                    ? OpenPosition({
+                      UserId: authState.User.Id,
+                      Ticker: chartState.symbol.QuoteAsset,
+                      Amount: chartState.tradingState.Quantity,
+                      Symbol: chartState.symbol.Symbol,
+                      IsLong: true,
+                      StopLoss: chartState.tradingState.StopLoss,
+                      TakeProfit: chartState.tradingState.TakeProfit,
+                      Leverage: chartState.tradingState.Leverage,
+                    })
+                    : Sell({
+                      UserId: authState.User.Id,
+                      BaseAsset: chartState.symbol.BaseAsset,
+                      QuoteAsset: chartState.symbol.QuoteAsset,
+                      Symbol: chartState.symbol.Symbol,
+                      Price: 10,
+                      Quantity: chartState.tradingState.Quantity,
+                    })}
                 className="sell-button">
-                Sell
+                {chartState.activeTab === "Bot" ? "Stop" : "Sell"}
               </button>
             </div>
           </div>
           <div className="chart-price">
             <div className="symbol">
-              {chartState.symbol}
+              {chartState.symbol.Symbol}
             </div>
             <div className="price-container">
               <span
@@ -361,54 +401,111 @@ export default function Chart() {
           </div>
         </div>
       </div>
-      <div className='buy-sell-orders'>
-        <div className="order-card">
-          <div className="order-section">
-            <h3 className="buy-title">Buy Orders</h3>
-            <div className="order-header">
-              <span>Price</span>
-              <span>Amount</span>
-              <span>Total</span>
-            </div>
-            <ul>
-              {chartState.buyOrders.map((order, index) => {
-                const price = parseFloat(order[0]);
-                const quantity = parseFloat(order[1]);
-                const total = (price * quantity).toFixed(2);
+      <div className='orders'>
+        <div className='buy-sell-orders'>
+          <div className="order-card">
+            <div className="order-section">
+              <h3 className="buy-title">Buy Orders</h3>
+              <div className="order-header">
+                <span>Price</span>
+                <span>Amount</span>
+                <span>Total</span>
+              </div>
+              <ul>
+                <ul>
+                  {chartState.buyOrders.map((order, index) => {
+                    const price = order.price;
+                    const quantity = order.quantity;
+                    const total = (price * quantity).toFixed(2);
 
-                return (
-                  <li key={index}>
-                    <span>{price.toFixed(5)}</span>
-                    <span>{quantity.toFixed(5)}</span>
-                    <span>{total}</span>
-                  </li>
-                );
-              })}
-            </ul>
+                    return (
+                      <li key={index}>
+                        <span>{price.toFixed(5)}</span>
+                        <span>{quantity.toFixed(5)}</span>
+                        <span>{total}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </ul>
+            </div>
+            <div className="order-section">
+              <h3 className="sell-title">Sell Orders</h3>
+              <div className="order-header">
+                <span>Price</span>
+                <span>Amount</span>
+                <span>Total</span>
+              </div>
+              <ul className='sell-section'>
+                {chartState.sellOrders.map((order, index) => {
+                  const price = order.price;
+                  const quantity = order.quantity;
+                  const total = (price * quantity).toFixed(2);
+
+                  return (
+                    <li key={index}>
+                      <span>{price.toFixed(5)}</span>
+                      <span className="sell-amount">{quantity.toFixed(5)}</span>
+                      <span className="sell-total">{total}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
-
-          <div className="order-section">
-            <h3 className="sell-title">Sell Orders</h3>
-            <div className="order-header">
-              <span>Price</span>
-              <span>Amount</span>
-              <span>Total</span>
+        </div>
+        <div className="my-orders">
+          <div className="header">
+            <h1>Orders</h1>
+            <div className="header-right">
+              <input
+                type="search"
+                name="search"
+                placeholder="Search (e.g. Elnur_0)"
+                className="search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
-            <ul className='sell-section'>
-              {chartState.sellOrders.map((order, index) => {
-                const price = parseFloat(order[0]);
-                const quantity = parseFloat(order[1]);
-                const total = (price * quantity).toFixed(2);
-
-                return (
-                  <li key={index}>
-                    <span>{price.toFixed(5)}</span>
-                    <span className="sell-amount">{quantity.toFixed(5)}</span>
-                    <span className="sell-total">{total}</span>
-                  </li>
-                );
-              })}
-            </ul>
+          </div>
+          <div className="transaction-list">
+            <table className="orders-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Symbol</th>
+                  <th>Currency</th>
+                  <th>Amount</th>
+                  <th>Entry Price</th>
+                  <th>Stop Loss</th>
+                  <th>Take Profit</th>
+                  <th>Leverage</th>
+                  <th>Open Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {profileState.Positions.filter(position =>
+                  !position.IsClosed &&
+                  (searchTerm.trim() === "" || position.Symbol.toUpperCase().includes(searchTerm.toUpperCase()))
+                ).map((position, index) => (
+                  <tr key={index}>
+                    <td>{position.Id}</td>
+                    <td>{position.Symbol}</td>
+                    <td>{position.Currency.Name}</td>
+                    <td>{position.Amount}</td>
+                    <td>${position.EntryPrice}</td>
+                    <td>{position.StopLoss > 0 ? position.StopLoss : "-"}</td>
+                    <td>{position.TakeProfit > 0 ? position.TakeProfit : "-"}</td>
+                    <td>{position.Leverage}</td>
+                    <td>{new Date(position.OpenDate).toLocaleString()}</td>
+                    <td className={position.IsClosed ? "status completed" : "status pending"}>
+                      {position.IsClosed ? "Closed" : "Open"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

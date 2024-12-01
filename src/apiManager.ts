@@ -16,21 +16,15 @@ class ApiManager {
                 },
                 data: ApiManager.buildRequestData(apiData.Data, apiData.Headers?.['Content-Type']),
                 timeout: 5000,
+                withCredentials: true,
             };
 
-            console.log(url);
             const response: AxiosResponse<T> = await axios(config);
             return response.data;
         } catch (error: any) {
-            if (error.response) {
-                throw new Error(
-                    `Ошибка API: ${error.response.status} ${error.response.statusText}. ${JSON.stringify(error.response.data)}`
-                );
-            } else if (error.code === 'ECONNABORTED') {
-                throw new Error('Ошибка сети: таймаут запроса');
-            } else {
-                throw new Error(`Ошибка сети: ${error.message}`);
-            }
+            throw new Error(
+                `Error API: ${error.response.status} ${error.response.statusText}. ${JSON.stringify(error.response.data)}`
+            );
         }
     }
 
@@ -38,22 +32,6 @@ class ApiManager {
         if (!params) return url;
         const queryString = new URLSearchParams(params).toString();
         return queryString ? `${url}?${queryString}` : url;
-    }
-
-    private static async generateSignature(params: Record<string, any>, secretKey: string): Promise<string> {
-        const queryString = new URLSearchParams(params).toString();
-        const encoder = new TextEncoder();
-        const keyData = encoder.encode(secretKey);
-        
-        const key = await crypto.subtle.importKey(
-            'raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
-        );
-        const data = encoder.encode(queryString);
-    
-        const signature = await crypto.subtle.sign('HMAC', key, data);
-        
-        const signatureArray = new Uint8Array(signature);
-        return signatureArray.reduce((hex, byte) => hex + byte.toString(16).padStart(2, '0'), '');
     }
 
     private static buildRequestData(data: any, contentType: string | undefined): any {

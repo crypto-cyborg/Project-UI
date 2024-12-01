@@ -39,10 +39,9 @@
       }
     },
     "Between": {
-      "Title": "Trade on Demo - No Registration Required!",
+      "Title": "Access the demo account after quick registration!",
       "Description": "Sign up for your personal account for access to additional features.",
-      "TryButton": "Try the Demo",
-      "RegisterButton": "Create Account"
+      "TryButton": "Try the Demo"
     },
     "ThirdPage": {
       "Title": "Increase Your Capital with Accurate Trading Forecasts",
@@ -99,7 +98,22 @@
     "APIKey": "API key Binance",
     "RememberMe": "Remember Me",
     "ForgotPassword": "Forgot Password?",
+    "Video": "How to get API keys from Binance?",
     "NoAccountText": "Don't have an account?",
     "HasAccountText": "Already have an account?"
+  },
+  "Chart": {
+    "ChartName": "Chart",
+    "Spot": "Spot",
+    "Margin": "Margin",
+    "Bot": "Bot",
+    "Price": "Price",
+    "Amount": "Amount",
+    "Total": "Total",
+    "TakeProfit": "Take Profit",
+    "Stop Loss": "Stop Loss",
+    "Buy": "Buy",
+    "Sale": "Sale",
+    "Leverage": "Leverage"
   }
 }

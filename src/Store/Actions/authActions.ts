@@ -2,14 +2,14 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import ApiManager from '../../apiManager';
 import { LoginDTO, RegisterDTO } from '../../Data/DTOs/Auth.dto';
 
-const baseUrl=import.meta.env.VITE_API_URL
+const baseUrl = import.meta.env.VITE_AUTH_API_URL
 
 export const LoginUser = createAsyncThunk(
     'auth/login',
     async (LoginDTO: LoginDTO, { rejectWithValue }) => {
         try {
             const response = await ApiManager.apiRequest({
-                Url: `${baseUrl}/api/Auth/sign-in`,
+                Url: `http://localhost:5292/api/v1/Auth/Login`,
                 Method: 'POST',
                 Headers: {
                     'Content-Type': 'application/json',
@@ -34,6 +34,24 @@ export const RegisterUser = createAsyncThunk(
                     'Content-Type': 'application/json',
                 },
                 Data: RegisterDTO,
+            });
+            return response;
+        } catch (error: any) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const GetUserAccountInfo = createAsyncThunk(
+    'auth/getaccountinfo',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await ApiManager.apiRequest({
+                Url: `${baseUrl}/api/Account`,
+                Method: 'GET',
+                Headers: {
+                    'Content-Type': 'application/json',
+                },
             });
             return response;
         } catch (error: any) {

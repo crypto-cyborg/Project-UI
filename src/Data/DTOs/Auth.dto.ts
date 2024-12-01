@@ -1,15 +1,15 @@
 export interface LoginDTO {
-    username: string,
-    password: string
+    Username: string,
+    Password: string
 }
 
 export interface RegisterDTO {
-    username: string,
-    password: string,
-    confirmPassword: string,
-    email: string,
-    firstName: string,
-    lastName: string,
-    secretKey: string,
-    apiKey: string
+    Username: string,
+    Password: string,
+    ConfirmPassword: string,
+    Email: string,
+    FirstName: string,
+    LastName: string,
+    SecretKey: string,
+    ApiKey: string
 }

@@ -1,5 +1,5 @@
 import App from "../App";
-import Admin from "../Pages/Admin";
+import Admin from "../Pages/Admin/Admin";
 import Auth from "../Pages/Auth/Auth";
 import Chart from "../Pages/Chart/Chart";
 import Home from "../Pages/Home/Home";
@@ -9,11 +9,7 @@ import PrivateRoute from "./PrivateRoute";
 
 const appRoutes = [
     {
-        path: "/chart",
-        element: <Chart />,
-    },
-    {
-        path: "home",
+        path: "chart",
         element: <Chart />,
     },
     {

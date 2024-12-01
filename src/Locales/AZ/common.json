@@ -39,10 +39,9 @@
       }
     },
     "Between": {
-      "Title": "Demo-da ticarət edin - Qeydiyyat tələb olunmur!",
+      "Title": "Demo hesabına sürətli qeydiyyatdan sonra daxil olun!",
       "Description": "Və əlavə xüsusiyyətlərə giriş üçün şəxsi hesabınıza qeydiyyatdan keçin.",
-      "TryButton": "Demo-nu sınaqdan keçirin",
-      "RegisterButton": "Hesab yaradın"
+      "TryButton": "Demo-nu sınaqdan keçirin"
     },
     "ThirdPage": {
       "Title": "Doğru ticarət proqnozları ilə kapitalınızı artırın",
@@ -99,6 +98,7 @@
     "APIKey": "API key Binance",
     "RememberMe": "Məni Yadda Saxla",
     "ForgotPassword": "Şifrəni Unutmusunuz?",
+    "Video": "Binancedən API açarlarını necə əldə etmək olar?",
     "NoAccountText": "Hesabınız Yoxdur?",
     "HasAccountText": "Artıq hesabınız var?"
   }

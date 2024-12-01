@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import BgVideo from '../../Assets/Videos/Background.mp4';
 import { useRef, useEffect } from 'react';
 import Lottie from 'lottie-react';
-import animationData from '../../Assets/Videos/Animation.json';
+import animationData from '../../Assets/Videos/AnimationNew.json';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from "../../Components/LanguageSwitcher/LanguageSwitcher";
 import Accordion from "../../Components/Accordion/Accordion";
@@ -107,8 +107,7 @@ export default function Home() {
                             <p className="text-muted">{t("Home.Between.Description")}</p>
                         </div>
                         <div className="flex-space">
-                            <Link className="button-1" to="/chart">{t("Home.Between.TryButton")}</Link>
-                            <a className="button-2">{t("Home.Between.RegisterButton")}</a>
+                            <Link className="button-1" to="/auth">{t("Home.Between.TryButton")}</Link>
                         </div>
                     </div>
                 </div>

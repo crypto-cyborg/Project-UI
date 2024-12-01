@@ -4,6 +4,9 @@ import { AppDispatch, RootState } from '../Reducers/store';
 import * as chartSlice from '../Reducers/chartSlice';
 import { Candle, Marker } from '../../Data/DTOs/Chart.dto';
 import * as LightweightCharts from 'lightweight-charts';
+import { SpotBuyAction, SpotSellAction, OpenPositionAction } from '../Actions/chartAction';
+import { Margin, Spot } from '../../Data/DTOs/Trading.dto';
+import { toast } from 'react-toastify';
 
 const useChartHook = (chartContainerRef: React.RefObject<HTMLDivElement>, chartProps: any) => {
   const chartState = useSelector((state: RootState) => state.chart);
@@ -12,28 +15,56 @@ const useChartHook = (chartContainerRef: React.RefObject<HTMLDivElement>, chartP
   const [candleSeries, setCandleSeries] = useState<any | null>(null);
   const [areaSeries, setAreaSeries] = useState<any | null>(null);
 
-  const fetchOrderBook = async (symbol: string) => {
-    try {
-      const response = await fetch(`https://api.binance.com/api/v3/depth?symbol=${symbol}`);
-      const data = await response.json();
-      dispatch(chartSlice.setBuyOrders(data.bids.slice(0, 50)));
-      dispatch(chartSlice.setSellOrders(data.asks.slice(0, 50)));
-    } catch (error) {
-      console.error('Error fetching order book:', error);
-    }
-  };
+  useEffect(() => {
+    if (!candleSeries || !areaSeries) return;
+    
+    const websocket = new WebSocket(
+      `wss://stream.binance.com:9443/ws/${chartState.symbol.Symbol.toLowerCase()}@depth20@1000ms`
+    );
+
+    websocket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+
+      const buyOrders = data.bids.slice(0, 50).map(([price, quantity]: [string, string]) => ({
+        price: parseFloat(price),
+        quantity: parseFloat(quantity),
+      }));
+
+      const sellOrders = data.asks.slice(0, 50).map(([price, quantity]: [string, string]) => ({
+        price: parseFloat(price),
+        quantity: parseFloat(quantity),
+      }));
+
+      dispatch(chartSlice.setBuyOrders(buyOrders));
+      dispatch(chartSlice.setSellOrders(sellOrders));
+    };
+
+    return () => {
+      websocket.close();
+    };
+  }, [chartState.symbol.Symbol, candleSeries, areaSeries, dispatch]);
 
   useEffect(() => {
     const fetchPairs = async () => {
-      const response = await fetch('https://api.binance.com/api/v3/exchangeInfo');
-      const data = await response.json();
-      const pairs = data.symbols.map((symbol: any) => symbol.symbol);
-      dispatch(chartSlice.setPairs(pairs));
+      try {
+        const response = await fetch('https://api.binance.com/api/v3/exchangeInfo');
+        const data = await response.json();
+
+        const pairs = data.symbols.map((symbol: any) => ({
+          symbol: symbol.symbol,
+          baseAsset: symbol.baseAsset,
+          quoteAsset: symbol.quoteAsset,
+        }));
+
+        dispatch(chartSlice.setPairs(pairs));
+      } catch (error) {
+        console.error('Ошибка при загрузке данных:', error);
+      }
     };
 
     fetchPairs();
   }, [dispatch]);
-
+  
   useEffect(() => {
     if (chartContainerRef.current) {
       const chart = LightweightCharts.createChart(chartContainerRef.current, {
@@ -62,9 +93,9 @@ const useChartHook = (chartContainerRef: React.RefObject<HTMLDivElement>, chartP
       const fetchCandles = async () => {
         try {
           const response = await fetch(
-            `https://api.binance.com/api/v3/klines?symbol=${chartState.symbol}&interval=${chartState.candleInterval}&limit=1000`
+            `https://api.binance.com/api/v3/klines?symbol=${chartState.symbol.Symbol}&interval=${chartState.candleInterval}&limit=1000`
           );
-          const data = await response.json();
+          const data = await response.json();    
 
           const initialCandles: Candle[] = data.map((d: any) => ({
             time: d[0] / 1000 as LightweightCharts.Time,
@@ -83,8 +114,6 @@ const useChartHook = (chartContainerRef: React.RefObject<HTMLDivElement>, chartP
             );
           }
 
-          fetchOrderBook(chartState.symbol);
-
         } catch (error) {
           console.error('Error fetching candle data:', error);
         }
@@ -96,27 +125,13 @@ const useChartHook = (chartContainerRef: React.RefObject<HTMLDivElement>, chartP
         chart.remove();
       };
     }
-  }, [chartState.chartType, chartState.symbol, chartState.candleInterval, dispatch, chartContainerRef, chartProps]);
-
-  useEffect(() => {
-    if (chartState.symbol) {
-      fetchOrderBook(chartState.symbol);
-      
-      const intervalId = setInterval(() => {
-        fetchOrderBook(chartState.symbol);
-      }, 1000);
-
-      return () => {
-        clearInterval(intervalId);
-      };
-    }
-  }, [chartState.symbol]);
+  }, [chartState.chartType, chartState.symbol.Symbol, chartState.candleInterval, dispatch, chartContainerRef, chartProps]);
 
   useEffect(() => {
     if (!candleSeries || !areaSeries || chartState.candles.length === 0) return;
 
     const websocket = new WebSocket(
-      `wss://stream.binance.com:9443/ws/${chartState.symbol.toLowerCase()}@kline_${chartState.candleInterval}`
+      `wss://stream.binance.com:9443/ws/${chartState.symbol.Symbol.toLowerCase()}@kline_${chartState.candleInterval}`
     );
 
     websocket.onmessage = (event) => {
@@ -133,6 +148,10 @@ const useChartHook = (chartContainerRef: React.RefObject<HTMLDivElement>, chartP
 
       dispatch(chartSlice.setCurrentPrice(newCandle.close));
 
+      if (chartState.tradingState.Price == 0 && chartState.activeSecondaryTab == 'Limit') {
+        dispatch(chartSlice.setTradingStatePrice(newCandle.close))
+      }  
+
       const updatedCandles = UpdateCandles(candleSeries, areaSeries, chartState.candles, newCandle);
       dispatch(chartSlice.setCandles(updatedCandles));
     };
@@ -140,46 +159,75 @@ const useChartHook = (chartContainerRef: React.RefObject<HTMLDivElement>, chartP
     return () => {
       websocket.close();
     };
-  }, [candleSeries, areaSeries, chartState.candles, chartState.chartType, chartState.symbol, dispatch]);
+  }, [candleSeries, areaSeries, chartState.candles, chartState.chartType, chartState.symbol.Symbol, dispatch]);
 
-  const Buy = useCallback((button: string) => {
-    if (chartState.candles.length === 0) return;
+  // const Buy = useCallback((button: string) => {
+  //   if (chartState.candles.length === 0) return;
 
-    const lastCandle = chartState.candles[chartState.candles.length - 1];
+  //   const lastCandle = chartState.candles[chartState.candles.length - 1];
 
-    const existingBuyMarker = chartState.markers.find(marker => marker.time === lastCandle.time && marker.shape === 'arrowUp');
-    const existingSellMarker = chartState.markers.find(marker => marker.time === lastCandle.time && marker.shape === 'arrowDown');
+  //   const existingBuyMarker = chartState.markers.find(marker => marker.time === lastCandle.time && marker.shape === 'arrowUp');
+  //   const existingSellMarker = chartState.markers.find(marker => marker.time === lastCandle.time && marker.shape === 'arrowDown');
 
-    if ((button === 'BUY' && existingBuyMarker) || (button === 'SELL' && existingSellMarker)) {
-      return;
-    }
+  //   if ((button === 'BUY' && existingBuyMarker) || (button === 'SELL' && existingSellMarker)) {
+  //     return;
+  //   }
 
-    let newMarker: Marker;
+  //   let newMarker: Marker;
 
-    if (button === 'SELL') {
-      newMarker = {
-        time: lastCandle.time,
-        position: 'aboveBar',
-        color: '#ef5350',
-        shape: 'arrowDown',
-        text: '',
-      };
+  //   if (button === 'SELL') {
+  //     newMarker = {
+  //       time: lastCandle.time,
+  //       position: 'aboveBar',
+  //       color: '#ef5350',
+  //       shape: 'arrowDown',
+  //       text: '',
+  //     };
+  //   } else {
+  //     newMarker = {
+  //       time: lastCandle.time,
+  //       position: 'belowBar',
+  //       color: '#26a69a',
+  //       shape: 'arrowUp',
+  //       text: '',
+  //     };
+  //   }
+
+  //   const updatedMarkers = [...chartState.markers, newMarker];
+  //   dispatch(chartSlice.setMarkers(updatedMarkers));
+
+  //   candleSeries?.setMarkers(updatedMarkers);
+  // }, [chartState.candles, chartState.markers, dispatch]);
+
+  const Buy = async (buyData: Spot) => {
+    if (buyData.Quantity <= 0) {
+      toast.error("The amount cannot be less than or equal to zero.", {
+        position: "bottom-right",
+      });
     } else {
-      newMarker = {
-        time: lastCandle.time,
-        position: 'belowBar',
-        color: '#26a69a',
-        shape: 'arrowUp',
-        text: '',
-      };
+      await dispatch(SpotBuyAction(buyData));
     }
+  };
 
-    const updatedMarkers = [...chartState.markers, newMarker];
-    dispatch(chartSlice.setMarkers(updatedMarkers));
-
-    candleSeries?.setMarkers(updatedMarkers);
-  }, [chartState.candles, chartState.markers, dispatch]);
-
+  const Sell = async (sellData: Spot) => {
+    if (sellData.Quantity <= 0) {
+      toast.error("The amount cannot be less than or equal to zero.", {
+        position: "bottom-right",
+      });
+    } else {
+      await dispatch(SpotSellAction(sellData));
+    }
+  };
+  
+  const OpenPosition = async (positionData: Margin) => {
+    if (positionData.Amount <= 0) {
+      toast.error("The amount cannot be less than or equal to zero.", {
+        position: "bottom-right",
+      });
+    } else {
+      await dispatch(OpenPositionAction(positionData));
+    }
+  };
 
   const UpdateCandles = useCallback(
     (candleSeries: any, areaSeries: any, prevCandles: Candle[], newCandle: Candle): Candle[] => {
@@ -212,7 +260,7 @@ const useChartHook = (chartContainerRef: React.RefObject<HTMLDivElement>, chartP
     dispatch(chartSlice.setSearchQuery(query));
 
     if (query.length > 0) {
-      const filtered = chartState.pairs.filter(pair => pair.includes(query));
+      const filtered = chartState.pairs.filter(pair => pair.symbol.includes(query));
       dispatch(chartSlice.setFilteredPairs(filtered));
       dispatch(chartSlice.setShowDropdown(true));
     } else {
@@ -222,11 +270,14 @@ const useChartHook = (chartContainerRef: React.RefObject<HTMLDivElement>, chartP
 
   const PairClick = (pair: string) => {
     dispatch(chartSlice.setSymbol(pair));
+    dispatch(chartSlice.setTradingStatePrice(0));
+    dispatch(chartSlice.setTradingStateTotal(0));
+    dispatch(chartSlice.setTradingStateQuantity(0));
     dispatch(chartSlice.setSearchQuery(pair));
     dispatch(chartSlice.setShowDropdown(false));
   };
 
-  return { Buy, SearchChange, PairClick };
+  return { Buy, Sell, OpenPosition, SearchChange, PairClick };
 };
 
 export default useChartHook;
