@@ -9,7 +9,7 @@ export const LoginUser = createAsyncThunk(
     async (LoginDTO: LoginDTO, { rejectWithValue }) => {
         try {
             const response = await ApiManager.apiRequest({
-                Url: `http://localhost:5292/api/v1/Auth/Login`,
+                Url: `${baseUrl}/api/Auth/sign-in`,
                 Method: 'POST',
                 Headers: {
                     'Content-Type': 'application/json',
